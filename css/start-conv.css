@@ -1,0 +1,21 @@
+.header{
+    margin-top: -16%;
+    background-color: white;
+    height: 100%;
+    border-radius: 33px;
+}
+.cust-header{
+    text-align: center;
+    font-size: 2em;
+    position: relative;
+    top: 3%;
+}
+.start-now{
+    position: relative;
+    margin-top: 60%;
+}
+.arrow-icon{
+    left: 16%;
+    position: relative;
+    font-size: xxx-large;
+}

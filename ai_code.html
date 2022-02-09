@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Start Conv</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/start-conv.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+</head>
+<style>
+    .btn-tags-blue{
+        background-color: blue;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    width: 30%;
+    margin: 4px;
+    }
+    .btn-tags-gray{
+        background-color: #e3e3ec;
+    border-radius: 10px;
+    text-align: center;
+    color: black;
+    width: 30%;
+    margin: 4px;
+    }
+    .retake{
+        text-align: center;
+    background: #3d3db8;
+    border-radius: 22px;
+    width: 48%;
+    margin-left: 10%;
+    }
+</style>
+<body>
+    <div class="" style="width: 100%;background-color: #6746a6;height: 21%;color: white;text-align: center;">
+        <span class="" style="font-size: 1.5em;position: relative;top: 10%;">
+            < Feedback </span>
+    </div>
+    <div class="header" style="margin-top: -24%;">
+        <div class="vl" style="
+        border-left: 6px solid green;
+        height: 100px;
+        position: relative;
+        left: 16%;
+        top: 2%;
+    "></div>
+        <p style="top: -7%;
+        position: relative;
+        top:0;
+        margin-left: 31%;margin-top: -17%;
+    ">
+            Good! You must first start with
+            light conversation before
+            jumping to business.
+        </p>
+        <div class="tone" style="border: 1px solid wheat;height: 9%;margin: 10%;position:relative; top:-1%;">
+            <div style="float: left;width: 40%;margin-top: 10px;margin-left: 20px;">
+                <b>Your Tone</b>
+                Happy
+            </div>
+            <div style="float: right;">
+                <p style="font-size: 3em;">&#128522</p>
+            </div>
+        </div>
+        <div style="width: 80%;margin-top: -5%;height: 20%;margin-left: 10%;">
+            <div class="length" style="border: 1px solid wheat;
+            width: 50%;
+            height: 100%;float: left;margin-left: -2%;text-align: center;">
+                <p style="font-size: 1.2em;">
+                    <i class="fa fa-clock-o"></i>
+                </p>
+                <p style="font-size: 1.2em;">Length</p>
+                <p style="color: green;font-size: 1em;">Appropriate</p>
+                <p style="font-size: 2em;">0:32</p>
+                <p>Target 0:30 to 1:00</p>
+            </div>
+            <div class="length" style="border: 1px solid wheat;
+            width: 50%;
+            height: 100%;float: right;margin-left: -2%;text-align: center;">
+                <p style="font-size: 1.2em;">
+                    <i class="fa fa-stopwatch"></i>
+                </p>
+                <p style="font-size: 1.2em;">Pitch Rate</p>
+                <p style="color: green;font-size: 1em;">Slow</p>
+                <p style="font-size: 2em;">90 WPM</p>
+                <p>Target 120 to 150</p>
+            </div>
+        </div>
+        <div style="border: 1px solid wheat;height: 25%;margin: 9%;text-align: center;">
+            <p style="font-size: 20px;"><i class="fa fa-tag"></i></p>
+            <p>Keywords Matched</p>
+            <p>Good Match</p>
+            <div class="buttons">
+                <button class="btn-tags-blue">Thank you</button>
+                <button class="btn-tags-blue">Onboarding</button>
+                <button class="btn-tags-blue">Carefull</button>
+                <button class="btn-tags-blue">Sit Amet</button>
+                <button class="btn-tags-gray">License</button>
+                <button class="btn-tags-gray">Missed</button>
+                <button class="btn-tags-gray">Keywords</button>
+                <button class="btn-tags-gray">Take care</button>
+            </div>
+        </div>
+        <div class="" style="position: relative;height: 25%;">
+            
+            <button class="retake" style="color: white;height: 20%;"onclick="retake();" >Retake <i class="fa fa-video-camera"></i></button>
+            <button class="retake" style="color: white;width: 10%;height: 20%;" onclick="nextVideo()"> <i class="fa fa-arrow-right"></i></button>
+        </div>
+    </div>
+    <video width="320" height="240" controls autoplay="autoplay" id="myVideo" style="display: none;">
+        <source src="videos/video2.mp4" type="video/mp4">
+        <!-- <source src="movie.ogg" type="video/ogg"> -->
+        Your browser does not support the video tag.
+    </video>
+    <!--===============================================================================================-->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/daterangepicker/moment.min.js"></script>
+    <script src="vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/countdowntime/countdowntime.js"></script>
+    <!--===============================================================================================-->
+    <script src="js/main.js"></script>
+    <script>
+        function retake(){
+            location.href = '/record.html';
+        }
+        const video = document.getElementById("myVideo");
+        const source = document.createElement("source");
+
+        function loadVideo(element, src) {
+            source.src = src;
+            element.appendChild(source);
+            element.load();
+            element.play();
+        }
+        function nextVideo(){
+            loadVideo(
+                video,
+                "https://www.youtube.com/watch?v=xhdyyuU0eeM"
+            )
+        }
+        document.getElementById('myVideo').addEventListener('ended', myHandler, false);
+    function myHandler(e) {
+        // What you want to do after the event
+        console.log("Hey I am finished");
+        location.href = "/record.html";
+    }
+    </script>
+</body>
+
+</html>
