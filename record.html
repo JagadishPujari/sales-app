@@ -31,7 +31,8 @@
 </head>
 
 <body style="background-color: #61298c;color: white;">
-    <div class="main-container" id="record-page" style="position: relative;top: 10%;text-align: center;font-size: xx-large;">
+    <div class="main-container" id="record-page"
+        style="position: relative;top: 10%;text-align: center;font-size: xx-large;">
         <div class="" style="padding: 19px;
     font-size: x-large;">
 
@@ -46,27 +47,40 @@
                 exceeding a total of 1 minute.</p>
         </div>
         <div class="record-video">
-            <div class="start-now">
+            <div class="start-now" style="margin-top: 54%;">
+                <p style="font-size: 1.2em;margin-top: -24%;position: absolute;margin-left: 32%;">Record</p>
                 <label class="custom-file-upload">
-                    <!-- <input type="file" accept="video/*;capture=camera"> -->
-                    <input id="filePoster" type="file" accept="video/*" id="capture" capture="camcorder">
-
-                    Record <i class="fa fa-video-camera"></i>
+                    <input id="filePoster" type="file" accept="video/*" capture="user">
+                    <i class="fa fa-video-camera"></i>
                 </label>
-                <!-- <input type="file" accept="image/*;capture=camera"> -->
+                <label class="custom-file-upload">
+                    <i class="fa fa-microphone" onclick="start()" id="record"></i>
+                    <i class="fa fa-microphone-slash"
+                        id="stopRecord" style="display: none;"></i>
+                    </label>
+                </label>
+                <audio id=recordedAudio></audio>
+                <span id="action" style="font-size: 12px;"></span>
+                <div id="output" class="hide"></div>
             </div>
 
         </div>
-        <!-- <div class="base64"></div> -->
     </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-    var files = document.getElementById('filePoster');
-    files.addEventListener("change", function () {
-        location.href = "/ai_code.html";
-    });
+    var input = document.getElementById('filePoster');
+        input.addEventListener('change', (ev)=>{
+                console.log(input.files[0]);
+                alert(input.files[0].type)
+                var data = {
+                    title: input.files[0].name,
+                    description: 'Mobile recorded video',
+                    file: input.files[0]
+                }
+                sendData(data);
+            })
 </script>
 <style>
     input[type="file"] {
@@ -77,7 +91,7 @@
         padding: 6px 12px;
         cursor: pointer;
         background: -webkit-linear-gradient(right, #21d4fd, #b721ff, #21d4fd, #b721ff);
-        width: 95%;
+        width: 45%;
         border-radius: 12px;
     }
 
@@ -85,6 +99,79 @@
         color: white !important;
         font-size: 16px;
     }
+
+    #output {
+        font-size: 10px;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .show {
+        display: block;
+    }
 </style>
+<script>
+    function start() {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                rec = new MediaRecorder(stream);
+                // record.disabled = true;
+                // record.style.backgroundColor = "blue"
+                // stopRecord.disabled = false;
+                $(record).css('display', 'none');
+                $(stopRecord).css('display', 'block');
+                audioChunks = [];
+                rec.start();
+                rec.ondataavailable = e => {
+                    audioChunks.push(e.data);
+                    if (rec.state == "inactive") {
+                        let blob = new Blob(audioChunks, { type: 'audio/mp3' });
+                        recordedAudio.src = URL.createObjectURL(blob);
+                        recordedAudio.controls = true;
+                        recordedAudio.autoplay = true;
+                        sendData(blob)
+
+
+                    }
+                }
+            })
+
+
+
+        stopRecord.onclick = e => {
+
+            $(record).css('display', 'block');
+            $(stopRecord).css('display', 'none');
+            rec.stop();
+        }
+    }
+
+    function sendData(data) {
+        var formData = new FormData();
+        formData.append('file', data.file);
+        formData.append('title', data.title);
+        formData.append('description', data.description);
+        formData.append("userId","jaguhiremath62@gmail.com")
+        $.ajax({
+            url: 'https://api.marsview.ai/cb/v1/conversation/save_file',
+            type: 'POST',
+            data: formData,
+            headers: {
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJqYWd1aGlyZW1hdGg2MkBnbWFpbC5jb20iLCJpYXQiOjE2NDQ1OTA1NzgsImV4cCI6MTY0NDU5NDE3OH0.v4mGT4SyzFuYxpg1iZ4gemvW5US79N6gLoyn0kunCyY',
+            }, 
+            processData: false,
+            contentType: false,
+            crossOrigin:true,
+            success: function (response) {
+                alert(JSON.stringify(response));
+            },
+            error: function (err) {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+</script>
 
 </html>
