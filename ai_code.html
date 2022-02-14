@@ -56,9 +56,11 @@
     }
 </style>
 <body>
-    <div class="loader-message">
-        <p>Your uploaded video is under process, Please come back after 10 min</p>
-        <div class="loader"></div>
+    <div id="cover-spin" >
+       <p style="position: relative;
+       top: 26%;
+       text-align: center;
+       font-size: 2em;">You data is under process, Please wait...</p> 
     </div>
     
     <div class="main-container">
@@ -164,6 +166,7 @@
 
 window.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM fully loaded and parsed', localStorage.getItem('txnId'));
+    $('#cover-spin').show(0)
     getMetadata();
 });
 function getMetadata(){
@@ -175,8 +178,9 @@ function getMetadata(){
             },
             crossOrigin: true,
             success: function (response) {
+                
                 if(response.status){
-                   $('.loader-message').css('display', 'none'); 
+                    $('#cover-spin').hide(0)
                 }
             },
             error: function (err) {

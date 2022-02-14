@@ -31,6 +31,7 @@
 </head>
 
 <body style="background-color: #61298c;color: white;">
+    <div id="cover-spin"></div>
     <div class="main-container" id="record-page"
         style="position: relative;top: 10%;text-align: center;font-size: xx-large;">
         <div class="" style="padding: 19px;
@@ -73,6 +74,7 @@
 <script>
     var input = document.getElementById('filePoster');
     input.addEventListener('change', (ev) => {
+        $('#cover-spin').show(0)
         var data = {
             title: input.files[0].name,
             description: 'Mobile recorded video',
@@ -147,7 +149,7 @@
             rec.stop();
         }
     }
- var accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJqYWd1aGlyZW1hdGg2MkBnbWFpbC5jb20iLCJpYXQiOjE2NDQ4MTM0NzksImV4cCI6MTY0NDgxNzA3OX0.lUBzOl_scbLG0NoLXIi0a5p-Va5TtHbcWrvCc_kAaSM';
+ var accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJqYWd1aGlyZW1hdGg2MkBnbWFpbC5jb20iLCJpYXQiOjE2NDQ4MTgzMDcsImV4cCI6MTY0NDgyMTkwN30.KCfhXeMLGusd5hoCO_Giu1jGbN0FTSyYT6M64sxmxlI';
     function sendData(data) {
         var formData = new FormData();
         formData.append('file', data.file);
