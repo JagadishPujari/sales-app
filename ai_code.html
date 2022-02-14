@@ -70,7 +70,7 @@
         <span class="" style="font-size: 1.5em;position: relative;top: 10%;">
             < Feedback </span>
     </div>
-    <div class="header" style="margin-top: -24%">
+    <div class="header" style="margin-top: -24%;overflow-y: scroll;">
         <div class="vl" style="
         border-left: 6px solid green;
         height: 100px;
@@ -95,6 +95,7 @@
             <div style="float: right;">
                 <p style="font-size: 3em;">&#128522</p>
             </div>
+            <h1 id="txtDisplay"></h1>
         </div>
         <div style="width: 80%;margin-top: -5%;height: 20%;margin-left: 10%;">
             <div class="length" style="border: 1px solid wheat;
@@ -111,7 +112,7 @@
             </div>
             <div class="length" style="border: 1px solid wheat;
             width: 50%;
-            height: 100%;float: right;margin-left: -2%;text-align: center;">
+            height: 100%;float: right;margin-left: -2%;text-align: center;font-size: 18px;">
                 <p style="font-size: 1.2em;">
                     <i class="fa fa-stopwatch"></i>
                 </p>
@@ -166,8 +167,9 @@
     <!--===============================================================================================-->
     <script src="js/main.js"></script>
     <script>
-
-window.addEventListener('DOMContentLoaded', (event) => {
+    var tag_value =  [{"happy":"&#128517;"},{"negative": "&#128518;"}]
+    // $("#txtDisplay").html(tag_value);
+   window.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM fully loaded and parsed', localStorage.getItem('txnId'));
     $('#cover-spin').show(0)
     getMetadata();
@@ -182,9 +184,11 @@ function getMetadata(){
             },
             crossOrigin: true,
             success: function (response) {
+               var emojidata = Object.assign(response,tag_value)
+               $("#txtDisplay").html(emojidata.emoji[1].negative)
                 if(response.status){
                     $('#cover-spin').hide(0)
-                    document.getElementsByClassName('tone-msg')[0].innerText = response.data.emotion[0].tone.value
+                 document.getElementsByClassName('tone-msg')[0].innerText = response.data.emotion[0].tone.value.charAt(0).toUpperCase() + response.data.emotion[0].tone.value.slice(1)
                     document.getElementsByClassName('confidence')[0].innerText = Math.round(response.data.emotion[0].tone.confidence*100) + "%";
                     //document.getElementsByClassName('buttons')[0].innerText = response.data.topicsData
                     response.data.topicsData.slice(-7).forEach(element  => {
@@ -197,7 +201,7 @@ function getMetadata(){
                     document.getElementsByClassName('emotion-length')[0].innerText = response.data.emotion.length
 
                 }
-                console.log(response);
+                console.log(emojidata);
             },
             error: function (err) {
                 alert(JSON.stringify(err));
