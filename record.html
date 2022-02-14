@@ -73,16 +73,10 @@
 <script>
     var input = document.getElementById('filePoster');
     input.addEventListener('change', (ev) => {
-        var newVideoFile = new File(
-    [URL.createObjectURL(input.files[0])],
-    input.files[0].name,
-    { type: 'video/mp4' }
-);
-        console.log(ev);
         var data = {
-            title: newVideoFile.name,
+            title: input.files[0].name,
             description: 'Mobile recorded video',
-            file: newVideoFile
+            file: input.files[0]
         }
         sendData(data);
         // getMetadata('txn-1c6q6hurkzkuewrv-1644731071339')

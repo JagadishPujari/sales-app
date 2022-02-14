@@ -56,6 +56,14 @@
     }
 </style>
 <body>
+    <div class="loader-message">
+        <p>Your uploaded video is under process, Please come back after 10 min</p>
+        <div class="loader"></div>
+    </div>
+    
+    <div class="main-container">
+        
+    </div>
     <div class="" style="width: 100%;background-color: #6746a6;height: 21%;color: white;text-align: center;">
         <span class="" style="font-size: 1.5em;position: relative;top: 10%;">
             < Feedback </span>
@@ -153,6 +161,29 @@
     <!--===============================================================================================-->
     <script src="js/main.js"></script>
     <script>
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM fully loaded and parsed', localStorage.getItem('txnId'));
+    getMetadata();
+});
+function getMetadata(){
+        $.ajax({
+            url: 'https://api.marsview.ai/cb/v1/conversation/fetch_metadata/'+ localStorage.getItem('txnId'),
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+            },
+            crossOrigin: true,
+            success: function (response) {
+                if(response.status){
+                   $('.loader-message').css('display', 'none'); 
+                }
+            },
+            error: function (err) {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
         function retake(){
             location.href = '/record.html';
         }
