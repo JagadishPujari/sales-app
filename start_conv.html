@@ -29,7 +29,12 @@
     <link rel="stylesheet" type="text/css" href="css/start-conv.css">
     <!--===============================================================================================-->
 </head>
+<style>
+    video{
+  object-fit:fill
 
+}
+</style>
 <body>
     <div class="" style="width: 100%;background-color: #6746a6;height: 19%;color: white;text-align: center;">
         <span class="" style="font-size: 1.5em;position: relative;top: 10%;">
@@ -49,7 +54,7 @@
                 your video, submit it and receive feedback.
             </p>
         </div>
-        <div class="start-now" style="margin-top: 38%;">
+        <div class="start-now" style="margin-top: 38%;width: 98%;position: fixed;">
             <div class="container-login100-form-btn">
                 <div class="wrap-login100-form-btn">
                     <div class="login100-form-bgbtn"></div>
@@ -62,7 +67,7 @@
 
     </div>
     <button onclick="startConv()">Jags</button>
-    <video width="320" height="240" controls id="myVideo" style="display: none;">
+    <video width="320" height="240" controls id="myVideo" class="videoBg" style="display: none;">
         <source src="videos/video1.mp4" type="video/mp4">
         <!-- <source src="movie.ogg" type="video/ogg"> -->
         Your browser does not support the video tag.
@@ -87,7 +92,7 @@
         function startConv(){
             console.log("Enable video")
             $("#myVideo").css('display', 'block');
-            document.getElementsByTagName('video')[0].webkitEnterFullscreen(); 
+            // document.getElementsByTagName('video')[0].webkitEnterFullscreen(); 
         }
         // location.href = "/record.html";
         const video = document.getElementById("myVideo");
