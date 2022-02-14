@@ -50,14 +50,15 @@
             <div class="start-now" style="margin-top: 54%;">
                 <p style="font-size: 1.2em;margin-top: -24%;position: absolute;margin-left: 32%;">Record</p>
                 <label class="custom-file-upload">
-                    <input id="filePoster" type="file" accept="video/*" capture="user">
+                    <input id="filePoster" type="file" accept="video/mp4,video/x-m4v,video/*" capture="user">
                     <i class="fa fa-video-camera"></i>
                 </label>
                 <label class="custom-file-upload">
+                    <!-- <input type="file" accept="audio/*" id="recorder"> -->
+                    <!-- <i class="fa fa-microphone" ></i> -->
                     <i class="fa fa-microphone" onclick="start()" id="record"></i>
-                    <i class="fa fa-microphone-slash"
-                        id="stopRecord" style="display: none;"></i>
-                    </label>
+                    <i class="fa fa-microphone-slash" id="stopRecord" style="display: none;"></i>
+                </label>
                 </label>
                 <audio id=recordedAudio></audio>
                 <span id="action" style="font-size: 12px;"></span>
@@ -71,16 +72,21 @@
 
 <script>
     var input = document.getElementById('filePoster');
-        input.addEventListener('change', (ev)=>{
-                console.log(input.files[0]);
-                alert(input.files[0].type)
-                var data = {
-                    title: input.files[0].name,
-                    description: 'Mobile recorded video',
-                    file: input.files[0]
-                }
-                sendData(data);
-            })
+    input.addEventListener('change', (ev) => {
+        var newVideoFile = new File(
+    [URL.createObjectURL(input.files[0])],
+    input.files[0].name,
+    { type: 'video/mp4' }
+);
+        console.log(ev);
+        var data = {
+            title: newVideoFile.name,
+            description: 'Mobile recorded video',
+            file: newVideoFile
+        }
+        sendData(data);
+        // getMetadata('txn-1c6q6hurkzkuewrv-1644731071339')
+    })
 </script>
 <style>
     input[type="file"] {
@@ -132,7 +138,7 @@
                         recordedAudio.controls = true;
                         recordedAudio.autoplay = true;
                         sendData(blob)
-
+                        
 
                     }
                 }
@@ -147,25 +153,121 @@
             rec.stop();
         }
     }
-
+ var accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJqYWd1aGlyZW1hdGg2MkBnbWFpbC5jb20iLCJpYXQiOjE2NDQ4MTM0NzksImV4cCI6MTY0NDgxNzA3OX0.lUBzOl_scbLG0NoLXIi0a5p-Va5TtHbcWrvCc_kAaSM';
     function sendData(data) {
         var formData = new FormData();
         formData.append('file', data.file);
         formData.append('title', data.title);
         formData.append('description', data.description);
-        formData.append("userId","jaguhiremath62@gmail.com")
+        formData.append("userId", "jaguhiremath62@gmail.com")
         $.ajax({
             url: 'https://api.marsview.ai/cb/v1/conversation/save_file',
             type: 'POST',
             data: formData,
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJqYWd1aGlyZW1hdGg2MkBnbWFpbC5jb20iLCJpYXQiOjE2NDQ1OTA1NzgsImV4cCI6MTY0NDU5NDE3OH0.v4mGT4SyzFuYxpg1iZ4gemvW5US79N6gLoyn0kunCyY',
-            }, 
+                'Authorization': 'Bearer ' + accessToken,
+            },
             processData: false,
             contentType: false,
-            crossOrigin:true,
+            crossOrigin: true,
             success: function (response) {
-                alert(JSON.stringify(response));
+                // alert(JSON.stringify(response));
+                uploadRequest(response.data.txnId)
+            },
+            error: function (err) {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function uploadRequest(txnId) {
+        var requestBody = {
+            "txnId": txnId,
+            "enableModels": [
+                {
+                    "modelType": "speech_to_text",
+                    "modelConfig": {
+                        "automatic_punctuation": true,
+                        "custom_vocabulary": ["Marsview", "Communication"],
+                        "speaker_seperation": {
+                            "num_speakers": 2
+                        },
+                        "enableKeywords": true
+                    }
+                },
+                {
+                    "modelType": "emotion_analysis"
+                },
+                {
+                    "modelType": "sentiment_analysis"
+                },
+                {
+                    "modelType": "speech_type_analysis"
+                },
+                {
+                    "modelType": "action_items",
+                    "modelConfig": {
+                        "priority": 1
+                    }
+                },
+                {
+                    "modelType": "question_response",
+                    "modelConfig": {
+                        "quality": 1
+                    }
+                },
+                {
+                    "modelType": "extractive_summary"
+                },
+                {
+                    "modelType": "meeting_topics"
+                },
+                {
+                    "modelType": "screengrabs",
+                    "modelConfig": {
+                        "ocr": {
+                            "enable": true
+                        }
+                    }
+                },
+                {
+                    "modelType": "screen_activity"
+                }
+
+            ]
+        }
+        console.log("REQIUEST", requestBody)
+        $.ajax({
+            url: 'https://api.marsview.ai/cb/v1/conversation/compute',
+            type: 'POST',
+            data: requestBody,
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            },
+            crossOrigin: true,
+            success: function (response) {
+                alert('Your video is submitted, wait for result');
+                getMetadata(txnId)
+            },
+            error: function (err) {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function getMetadata(txnId){
+        $.ajax({
+            url: 'https://api.marsview.ai/cb/v1/conversation/fetch_metadata/'+ txnId,
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            },
+            crossOrigin: true,
+            success: function (response) {
+                localStorage.setItem('txnId', txnId);
+                localStorage.setItem('accessToken', accessToken);
+                location.href = '/ai_code.html';
+                alert(response.message);
             },
             error: function (err) {
                 alert(JSON.stringify(err));
