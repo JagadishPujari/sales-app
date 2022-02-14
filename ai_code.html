@@ -60,7 +60,7 @@
        <p style="position: relative;
        top: 26%;
        text-align: center;
-       font-size: 2em;">You data is under process, Please wait...</p> 
+       font-size: 2em;">Your data is under process, Please wait...</p> 
     </div>
     
     <div class="main-container">
@@ -141,7 +141,7 @@
             <button class="retake" style="color: white;width: 10%;height: 20%;" onclick="nextVideo()"> <i class="fa fa-arrow-right"></i></button>
         </div>
     </div>
-    <video width="320" height="240" controls id="myVideo" style="display: none;">
+    <video width="320" height="240" class="videoBg" controls id="myVideo" style="display: none;">
         <source src="videos/video2.mp4" type="video/mp4">
         <!-- <source src="movie.ogg" type="video/ogg"> -->
         Your browser does not support the video tag.
@@ -200,7 +200,7 @@ function getMetadata(){
             // element.load();
             // element.play();
             $('#myVideo').css('display', 'block');
-            document.getElementsByTagName('video')[0].webkitEnterFullscreen(); 
+            // document.getElementsByTagName('video')[0].webkitEnterFullscreen(); 
         }
         function nextVideo(){
             loadVideo(
