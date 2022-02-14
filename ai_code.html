@@ -36,7 +36,7 @@
     border-radius: 10px;
     text-align: center;
     color: white;
-    width: 30%;
+    width: 33%;
     margin: 4px;
     }
     .btn-tags-gray{
@@ -70,7 +70,7 @@
         <span class="" style="font-size: 1.5em;position: relative;top: 10%;">
             < Feedback </span>
     </div>
-    <div class="header" style="margin-top: -24%;">
+    <div class="header" style="margin-top: -24%">
         <div class="vl" style="
         border-left: 6px solid green;
         height: 100px;
@@ -90,7 +90,7 @@
         <div class="tone" style="border: 1px solid wheat;height: 9%;margin: 10%;position:relative; top:-1%;">
             <div style="float: left;width: 40%;margin-top: 10px;margin-left: 20px;">
                 <b>Your Tone</b>
-                Happy
+                <p class="tone-msg"></p>
             </div>
             <div style="float: right;">
                 <p style="font-size: 3em;">&#128522</p>
@@ -105,7 +105,8 @@
                 </p>
                 <p style="font-size: 1.2em;">Length</p>
                 <p style="color: green;font-size: 1em;">Appropriate</p>
-                <p style="font-size: 2em;">0:32</p>
+                <!-- <p style="font-size: 2em;">0:32</p> -->
+                <p style="font-size: 2em;" class="emotion-length"></p>
                 <p>Target 0:30 to 1:00</p>
             </div>
             <div class="length" style="border: 1px solid wheat;
@@ -115,24 +116,26 @@
                     <i class="fa fa-stopwatch"></i>
                 </p>
                 <p style="font-size: 1.2em;">Pitch Rate</p>
+                <p class="confidence"></p>
                 <p style="color: green;font-size: 1em;">Slow</p>
-                <p style="font-size: 2em;">90 WPM</p>
+                <!-- <p style="font-size: 2em;">90 WPM</p> -->
                 <p>Target 120 to 150</p>
             </div>
         </div>
-        <div style="border: 1px solid wheat;height: 25%;margin: 9%;text-align: center;">
+        <div style="border: 1px solid wheat;margin: 9%;text-align: center;word-wrap: break-word;hyphens: auto">
             <p style="font-size: 20px;"><i class="fa fa-tag"></i></p>
             <p>Keywords Matched</p>
             <p>Good Match</p>
-            <div class="buttons">
-                <button class="btn-tags-blue">Thank you</button>
-                <button class="btn-tags-blue">Onboarding</button>
-                <button class="btn-tags-blue">Carefull</button>
-                <button class="btn-tags-blue">Sit Amet</button>
-                <button class="btn-tags-gray">License</button>
-                <button class="btn-tags-gray">Missed</button>
-                <button class="btn-tags-gray">Keywords</button>
-                <button class="btn-tags-gray">Take care</button>
+           <div class="buttons" style="color:blue">
+                
+                <!-- <button class="btn-tags-blue"></button>
+                <button class="btn-tags-blue"></button>
+                <button class="btn-tags-blue"></button>
+                <button class="btn-tags-gray"></button>
+                <button class="btn-tags-gray"></button>
+                <button class="btn-tags-gray"></button>
+                <button class="btn-tags-gray"></button>
+                <button class="btn-tags-blue"></button> -->
             </div>
         </div>
         <div class="" style="position: relative;height: 25%;">
@@ -169,6 +172,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     $('#cover-spin').show(0)
     getMetadata();
 });
+
 function getMetadata(){
         $.ajax({
             url: 'https://api.marsview.ai/cb/v1/conversation/fetch_metadata/'+ localStorage.getItem('txnId'),
@@ -178,10 +182,22 @@ function getMetadata(){
             },
             crossOrigin: true,
             success: function (response) {
-                
                 if(response.status){
                     $('#cover-spin').hide(0)
+                    document.getElementsByClassName('tone-msg')[0].innerText = response.data.emotion[0].tone.value
+                    document.getElementsByClassName('confidence')[0].innerText = Math.round(response.data.emotion[0].tone.confidence*100) + "%";
+                    //document.getElementsByClassName('buttons')[0].innerText = response.data.topicsData
+                    response.data.topicsData.slice(-7).forEach(element  => {
+                       // var btn = '<button class="btn-blue">' + element + '</button>';
+                        var node = document.createElement('button');
+                        node.className = 'btn-tags-blue'
+                        node.innerText = element;
+                        document.getElementsByClassName('buttons')[0].appendChild(node);
+                    });
+                    document.getElementsByClassName('emotion-length')[0].innerText = response.data.emotion.length
+
                 }
+                console.log(response);
             },
             error: function (err) {
                 alert(JSON.stringify(err));
