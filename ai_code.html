@@ -172,9 +172,10 @@
         "negative":"&#128532",
 
     }
+    var accessToken = '';
     // $("#txtDisplay").html(tag_value);
    window.addEventListener('DOMContentLoaded', (event) => {
-    console.log('DOM fully loaded and parsed', localStorage.getItem('txnId'));
+    // console.log('DOM fully loaded and parsed', localStorage.getItem('txnId'));
     $('#cover-spin').show(0)
     getAccessToken();
 });
@@ -190,7 +191,8 @@ function getAccessToken(){
             data: data,
             success: function (response) {
                 // alert(JSON.stringify(response));
-                localStorage.setItem('accessToken', response.data.accessToken)
+                // localStorage.setItem('accessToken', response.data.accessToken)
+                accessToken = response.data.accessToken;
                 getMetadata();
             },
             error: function (err) {
@@ -200,10 +202,10 @@ function getAccessToken(){
 }
 function getMetadata(){
         $.ajax({
-            url: 'https://api.marsview.ai/cb/v1/conversation/fetch_metadata/'+ localStorage.getItem('txnId'),
+            url: 'https://api.marsview.ai/cb/v1/conversation/fetch_metadata/' + location.search.split('=')[1],
             type: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+                'Authorization': 'Bearer ' + accessToken,
             },
             crossOrigin: true,
             success: function (response) {
