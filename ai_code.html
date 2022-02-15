@@ -5,6 +5,8 @@
     <title>Start Conv</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <meta http-equiv="refresh" content="10" /> -->
+
     <!--===============================================================================================-->
     <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
     <!--===============================================================================================-->
@@ -62,6 +64,11 @@
        top: 26%;
        text-align: center;
        font-size: 2em;color: #1b1c18;">Your data is under process, Please wait...</p> 
+       <div class="" style="position: relative;height: 25%;text-align: center;">
+          If you wish to continue you can..  
+        <button class="retake" style="color: white;height: 20%;" onclick="retake();">Retake <i class="fa fa-video-camera"></i></button>
+        <button class="retake" style="color: white;width: 10%;height: 20%;" onclick="nextVideo()"> <i class="fa fa-arrow-right"></i></button>
+    </div>
     </div>
     
     <div class="main-container">
@@ -181,9 +188,9 @@
 });
 function getAccessToken(){
     var data = {
-    "apiKey": "3cd777aa-4495-4f03-89ff-43b31471c87f",
-    "apiSecret": "7KBQFAK-8JAMY0T-H7ZM7CT-2HRWGZV",
-	"userId":"jaguhiremath62@gmail.com"
+    "apiKey": "cef7afbb-68e5-43d1-9cd5-468b2f39b674",
+    "apiSecret": "SVVTZEY-D3JM7M9-KKAMD2V-5WWVCX5",
+    "userId": "jagadish.pujari@ilimi.in"
 }
     $.ajax({
             url: 'https://api.marsview.ai/cb/v1/auth/create_access_token',
@@ -235,6 +242,7 @@ function getMetadata(){
         });
     }
         function retake(){
+            $('#cover-spin').hide(0)
             location.href = 'record.html';
         }
         const video = document.getElementById("myVideo");
@@ -249,6 +257,7 @@ function getMetadata(){
             // document.getElementsByTagName('video')[0].webkitEnterFullscreen(); 
         }
         function nextVideo(){
+            $('#cover-spin').hide(0)
             loadVideo(
                 video,
                 "https://www.youtube.com/watch?v=iDVItAX-meU"
