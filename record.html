@@ -80,7 +80,7 @@
             description: 'Mobile recorded video',
             file: input.files[0]
         }
-        sendData(data);
+        getAccessToken(data);
         // getMetadata('txn-1c6q6hurkzkuewrv-1644731071339')
     })
 </script>
@@ -115,6 +115,7 @@
     }
 </style>
 <script>
+    var accessToken;
     function start() {
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
@@ -133,8 +134,8 @@
                         recordedAudio.src = URL.createObjectURL(blob);
                         recordedAudio.controls = true;
                         recordedAudio.autoplay = true;
+                        getAccessToken();
                         sendData(blob)
-                        
 
                     }
                 }
@@ -149,7 +150,28 @@
             rec.stop();
         }
     }
- var accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJqYWd1aGlyZW1hdGg2MkBnbWFpbC5jb20iLCJpYXQiOjE2NDQ4MzEzNDgsImV4cCI6MTY0NDgzNDk0OH0.zP_-wIWIjJ8mrWBNl07u8EJWFdqd0UNg5CCgeXBLN8A';
+    function getAccessToken(Formdata){
+    var data = {
+    "apiKey": "3cd777aa-4495-4f03-89ff-43b31471c87f",
+    "apiSecret": "7KBQFAK-8JAMY0T-H7ZM7CT-2HRWGZV",
+	"userId":"jaguhiremath62@gmail.com"
+}
+    $.ajax({
+            url: 'https://api.marsview.ai/cb/v1/auth/create_access_token',
+            type: 'POST',
+            data: data,
+            success: function (response) {
+                // alert(JSON.stringify(response));
+                localStorage.setItem('accessToken', response.data.accessToken)
+                accessToken = response.data.accessToken;
+                sendData(Formdata);
+            },
+            error: function (err) {
+                alert(JSON.stringify(err));
+            }
+        });
+}
+//  var accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJqYWd1aGlyZW1hdGg2MkBnbWFpbC5jb20iLCJpYXQiOjE2NDQ4MzEzNDgsImV4cCI6MTY0NDgzNDk0OH0.zP_-wIWIjJ8mrWBNl07u8EJWFdqd0UNg5CCgeXBLN8A';
     function sendData(data) {
         var formData = new FormData();
         formData.append('file', data.file);
@@ -167,7 +189,7 @@
             contentType: false,
             crossOrigin: true,
             success: function (response) {
-                // alert(JSON.stringify(response));
+                alert(JSON.stringify(response));
                 uploadRequest(response.data.txnId)
             },
             error: function (err) {

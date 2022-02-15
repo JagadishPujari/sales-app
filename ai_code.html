@@ -36,8 +36,9 @@
     border-radius: 10px;
     text-align: center;
     color: white;
-    /* width: 33%; */
     margin: 4px;
+    margin: 3px;
+    padding: 6px;
     }
     .btn-tags-gray{
         background-color: #e3e3ec;
@@ -60,7 +61,7 @@
        <p style="position: relative;
        top: 26%;
        text-align: center;
-       font-size: 2em;">Your data is under process, Please wait...</p> 
+       font-size: 2em;color: #1b1c18;">Your data is under process, Please wait...</p> 
     </div>
     
     <div class="main-container">
@@ -92,7 +93,7 @@
                 <b>Your Tone</b>
                 <p class="tone-msg"></p>
             </div>
-            <div style="float: right;">
+            <div style="float: right;margin-right: 7%;">
                 <p class="emoji" style="font-size: 3em;"></p>
             </div>
         </div>
@@ -100,7 +101,7 @@
             <div class="length" style="border: 1px solid wheat;
             width: 50%;
             height: 100%;float: left;margin-left: -2%;text-align: center;">
-                <p style="font-size: 1.2em;">
+                <p style="font-size: 1.7em;">
                     <i class="fa fa-clock-o"></i>
                 </p>
                 <p style="font-size: 1.2em;">Length</p>
@@ -113,10 +114,10 @@
             width: 50%;
             height: 100%;float: right;margin-left: -2%;text-align: center;font-size: 18px;">
                 <p style="font-size: 1.2em;">
-                    <i class="fa fa-stopwatch"></i>
+                    <i class="fa fa-line-chart"></i>
                 </p>
                 <p style="font-size: 1.2em;">Pitch Rate</p>
-                <p class="confidence"></p>
+                <p class="confidence" style="font-size: 1.7em;"></p>
                 <p style="color: green;font-size: 1em;">Slow</p>
                 <!-- <p style="font-size: 2em;">90 WPM</p> -->
                 <p>Target 120 to 150</p>
@@ -175,9 +176,28 @@
    window.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM fully loaded and parsed', localStorage.getItem('txnId'));
     $('#cover-spin').show(0)
-    getMetadata();
+    getAccessToken();
 });
-
+function getAccessToken(){
+    var data = {
+    "apiKey": "3cd777aa-4495-4f03-89ff-43b31471c87f",
+    "apiSecret": "7KBQFAK-8JAMY0T-H7ZM7CT-2HRWGZV",
+	"userId":"jaguhiremath62@gmail.com"
+}
+    $.ajax({
+            url: 'https://api.marsview.ai/cb/v1/auth/create_access_token',
+            type: 'POST',
+            data: data,
+            success: function (response) {
+                // alert(JSON.stringify(response));
+                localStorage.setItem('accessToken', response.data.accessToken)
+                getMetadata();
+            },
+            error: function (err) {
+                alert(JSON.stringify(err));
+            }
+        });
+}
 function getMetadata(){
         $.ajax({
             url: 'https://api.marsview.ai/cb/v1/conversation/fetch_metadata/'+ localStorage.getItem('txnId'),
@@ -187,10 +207,11 @@ function getMetadata(){
             },
             crossOrigin: true,
             success: function (response) {
-               var emojidata = Object.assign(response,tag_value)
-               $(".emoji").html(tag_value[response.data.emotion[0].tone.value])
+            //    var emojidata = Object.assign(response,tag_value)
+               
                 if(response.status){
                     $('#cover-spin').hide(0)
+                    $(".emoji").html(tag_value[response.data.emotion[0].tone.value])
                  document.getElementsByClassName('tone-msg')[0].innerText = response.data.emotion[0].tone.value.charAt(0).toUpperCase() + response.data.emotion[0].tone.value.slice(1)
                     document.getElementsByClassName('confidence')[0].innerText = Math.round(response.data.emotion[0].tone.confidence*100) + "%";
                     //document.getElementsByClassName('buttons')[0].innerText = response.data.topicsData
@@ -204,7 +225,7 @@ function getMetadata(){
                     document.getElementsByClassName('emotion-length')[0].innerText = response.data.emotion.length
 
                 }
-                console.log(emojidata);
+                // console.log(emojidata);
             },
             error: function (err) {
                 alert(JSON.stringify(err));
