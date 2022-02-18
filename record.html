@@ -170,14 +170,11 @@
             type: 'POST',
             data: data,
             success: function (response) {
-                // alert(JSON.stringify(response));
-                // localStorage.setItem('accessToken', response.data.accessToken)
                 accessToken = response.data.accessToken;
                 sendData(Formdata);
             },
             error: function (err) {
                 toastr.error('Please login again')
-                // alert(JSON.stringify(err));
             }
         });
     }
@@ -199,13 +196,11 @@
             contentType: false,
             crossOrigin: true,
             success: function (response) {
-                alert(JSON.stringify(response));
                 toastr.success('Video saved successfully, transaction ID is', response.data.txnId)
                 uploadRequest(response.data.txnId)
             },
             error: function (err) {
                 $('#cover-spin').hide(0)
-                alert(JSON.stringify(err));
                 toastr.error('Failed!!!', err.responseJSON.message)
             }
         });
@@ -277,14 +272,12 @@
             },
             crossOrigin: true,
             success: function (response) {
-                alert('Your video is submitted, wait for result');
                 toastr.success('Your video is sent for analytics')
                 getMetadata(txnId)
             },
             error: function (err) {
                 $('#cover-spin').hide(0)
                 toastr.error('Something went wrong!!!')
-                alert(JSON.stringify(err));
             }
         });
     }
@@ -300,13 +293,11 @@
             success: function (response) {
                 $('#cover-spin').hide(0)
                 location.href = 'ai_code.html?txnId=' + txnId;
-                // alert(response.message);
                 toastr.success('Success!!!', response.message)
             },
             error: function (err) {
                 $('#cover-spin').hide(0)
-                toastr.error('Failed to get Metadata', response.message)
-                alert(JSON.stringify(err));
+                toastr.error('Failed to get Metadata', err.responseJSON.message)
             }
         });
     }

@@ -197,8 +197,6 @@ function getAccessToken(){
             type: 'POST',
             data: data,
             success: function (response) {
-                // alert(JSON.stringify(response));
-                // localStorage.setItem('accessToken', response.data.accessToken)
                 accessToken = response.data.accessToken;
                 getMetadata();
             },
