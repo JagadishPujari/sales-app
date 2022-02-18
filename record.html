@@ -58,10 +58,11 @@
                     <!-- <input type="file" accept="audio/*" id="recorder"> -->
                     <!-- <i class="fa fa-microphone" ></i> -->
                     <i class="fa fa-microphone" onclick="start()" id="record"></i>
-                    <i class="fa fa-microphone-slash" id="stopRecord" style="display: none;"></i>
+                    <i class="fa fa-microphone-slash" id="stopRecord" style="display: none;"><i class="fa fa-circle text-danger Blink"></i></i>
                 </label>
                 </label>
-                <audio id=recordedAudio></audio>
+                
+                <!-- <audio id=recordedAudio></audio> -->
                 <span id="action" style="font-size: 12px;"></span>
                 <div id="output" class="hide"></div>
             </div>
@@ -85,6 +86,13 @@
     })
 </script>
 <style>
+    .Blink {
+  animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
+}
+@keyframes blinker {  
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
     input[type="file"] {
         display: none;
     }
@@ -120,22 +128,21 @@
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
                 rec = new MediaRecorder(stream);
-                // record.disabled = true;
-                // record.style.backgroundColor = "blue"
-                // stopRecord.disabled = false;
                 $(record).css('display', 'none');
-                $(stopRecord).css('display', 'block');
+                $(stopRecord).css('display', 'inline-block');
                 audioChunks = [];
                 rec.start();
                 rec.ondataavailable = e => {
                     audioChunks.push(e.data);
                     if (rec.state == "inactive") {
                         let blob = new Blob(audioChunks, { type: 'audio/mp3' });
-                        recordedAudio.src = URL.createObjectURL(blob);
-                        recordedAudio.controls = true;
-                        recordedAudio.autoplay = true;
-                        getAccessToken();
-                        sendData(blob)
+                        var data = {
+                            title: 'record.mp3',
+                            description: 'Mobile recorded audio',
+                            file: new File([blob], "record.mp3")
+                        }
+                        getAccessToken(data);
+                        // sendData(blob)
 
                     }
                 }
@@ -145,18 +152,18 @@
 
         stopRecord.onclick = e => {
 
-            $(record).css('display', 'block');
+            $(record).css('display', 'inline-block');
             $(stopRecord).css('display', 'none');
             rec.stop();
         }
     }
-    function getAccessToken(Formdata){
-    var data = {
-    "apiKey": "cef7afbb-68e5-43d1-9cd5-468b2f39b674",
-    "apiSecret": "SVVTZEY-D3JM7M9-KKAMD2V-5WWVCX5",
-    "userId": "jagadish.pujari@ilimi.in"
-}
-    $.ajax({
+    function getAccessToken(Formdata) {
+        var data = {
+            "apiKey": "cef7afbb-68e5-43d1-9cd5-468b2f39b674",
+            "apiSecret": "SVVTZEY-D3JM7M9-KKAMD2V-5WWVCX5",
+            "userId": "jagadish.pujari@ilimi.in"
+        }
+        $.ajax({
             url: 'https://api.marsview.ai/cb/v1/auth/create_access_token',
             type: 'POST',
             data: data,
@@ -170,8 +177,8 @@
                 alert(JSON.stringify(err));
             }
         });
-}
-//  var accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJqYWd1aGlyZW1hdGg2MkBnbWFpbC5jb20iLCJpYXQiOjE2NDQ4MzEzNDgsImV4cCI6MTY0NDgzNDk0OH0.zP_-wIWIjJ8mrWBNl07u8EJWFdqd0UNg5CCgeXBLN8A';
+    }
+    //  var accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJqYWd1aGlyZW1hdGg2MkBnbWFpbC5jb20iLCJpYXQiOjE2NDQ4MzEzNDgsImV4cCI6MTY0NDgzNDk0OH0.zP_-wIWIjJ8mrWBNl07u8EJWFdqd0UNg5CCgeXBLN8A';
     function sendData(data) {
         var formData = new FormData();
         formData.append('file', data.file);
@@ -273,17 +280,15 @@
         });
     }
 
-    function getMetadata(txnId){
+    function getMetadata(txnId) {
         $.ajax({
-            url: 'https://api.marsview.ai/cb/v1/conversation/fetch_metadata/'+ txnId,
+            url: 'https://api.marsview.ai/cb/v1/conversation/fetch_metadata/' + txnId,
             type: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
             },
             crossOrigin: true,
             success: function (response) {
-                // localStorage.setItem('txnId', txnId);
-                // localStorage.setItem('accessToken', accessToken);
                 location.href = 'ai_code.html?txnId=' + txnId;
                 alert(response.message);
             },
