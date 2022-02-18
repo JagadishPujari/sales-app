@@ -216,8 +216,6 @@ function getMetadata(){
             },
             crossOrigin: true,
             success: function (response) {
-            //    var emojidata = Object.assign(response,tag_value)
-               
                 if(response.status){
                     $('#cover-spin').hide(0)
                     $(".emoji").html(tag_value[response.data.emotion[0].tone.value])
@@ -234,7 +232,6 @@ function getMetadata(){
                     document.getElementsByClassName('emotion-length')[0].innerText = response.data.emotion.length
 
                 }
-                // console.log(emojidata);
             },
             error: function (err) {
                 alert(JSON.stringify(err));

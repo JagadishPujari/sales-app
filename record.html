@@ -27,6 +27,7 @@
     <link rel="stylesheet" type="text/css" href="css/util.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/start-conv.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <!--===============================================================================================-->
 </head>
 
@@ -71,7 +72,7 @@
     </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
     var input = document.getElementById('filePoster');
     input.addEventListener('change', (ev) => {
@@ -141,6 +142,7 @@
                             description: 'Mobile recorded audio',
                             file: new File([blob], "record.mp3")
                         }
+                        $('#cover-spin').show(0)
                         getAccessToken(data);
                         // sendData(blob)
 
@@ -174,7 +176,8 @@
                 sendData(Formdata);
             },
             error: function (err) {
-                alert(JSON.stringify(err));
+                toastr.error('Please login again')
+                // alert(JSON.stringify(err));
             }
         });
     }
@@ -197,10 +200,13 @@
             crossOrigin: true,
             success: function (response) {
                 alert(JSON.stringify(response));
+                toastr.success('Video saved successfully, transaction ID is', response.data.txnId)
                 uploadRequest(response.data.txnId)
             },
             error: function (err) {
+                $('#cover-spin').hide(0)
                 alert(JSON.stringify(err));
+                toastr.error('Failed!!!', err.responseJSON.message)
             }
         });
     }
@@ -272,9 +278,12 @@
             crossOrigin: true,
             success: function (response) {
                 alert('Your video is submitted, wait for result');
+                toastr.success('Your video is sent for analytics')
                 getMetadata(txnId)
             },
             error: function (err) {
+                $('#cover-spin').hide(0)
+                toastr.error('Something went wrong!!!')
                 alert(JSON.stringify(err));
             }
         });
@@ -289,10 +298,14 @@
             },
             crossOrigin: true,
             success: function (response) {
+                $('#cover-spin').hide(0)
                 location.href = 'ai_code.html?txnId=' + txnId;
-                alert(response.message);
+                // alert(response.message);
+                toastr.success('Success!!!', response.message)
             },
             error: function (err) {
+                $('#cover-spin').hide(0)
+                toastr.error('Failed to get Metadata', response.message)
                 alert(JSON.stringify(err));
             }
         });
