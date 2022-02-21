@@ -152,6 +152,7 @@
                             description: "Recorded audio",
                             file: new File([blob], 'recorded.wav', {type:"audio/wav"})
                         }
+                        $('#cover-spin').show(0)
                         getAccessToken(audioData);
                     }
                 };
