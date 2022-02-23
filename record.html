@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Start Conv</title>
+    <title>Record</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
@@ -300,8 +300,20 @@
             crossOrigin: true,
             success: function (response) {
                 $('#cover-spin').hide(0)
-                location.href = 'ai_code.html?txnId=' + txnId;
+                var userTxnIds = localStorage.getItem('userTxnIds');
+                if(userTxnIds && userTxnIds.length > 0){
+                    let temp = JSON.parse(userTxnIds);
+                    temp.push(txnId);
+                    localStorage.setItem('userTxnIds', JSON.stringify(temp));
+                }else{
+                    var userTxnIds = [];
+                    userTxnIds.push(txnId);
+                    localStorage.setItem('userTxnIds', JSON.stringify(userTxnIds));
+                }
+                // location.href = 'ai_code.html?txnId=' + txnId;
                 toastr.success('Success!!!', response.message)
+                location.href = 'report.html';
+                
             },
             error: function (err) {
                 $('#cover-spin').hide(0)

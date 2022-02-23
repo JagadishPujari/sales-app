@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-    <title>Start Conv</title>
+    <title>Report card</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="refresh" content="10" />
+    <!-- <meta http-equiv="refresh" content="10" /> -->
 
     <!--===============================================================================================-->
     <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
@@ -33,46 +33,40 @@
     <!--===============================================================================================-->
 </head>
 <style>
-    .btn-tags-blue{
+    .btn-tags-blue {
         background-color: blue;
-    border-radius: 10px;
-    text-align: center;
-    color: white;
-    margin: 4px;
-    margin: 3px;
-    padding: 6px;
-    }
-    .btn-tags-gray{
-        background-color: #e3e3ec;
-    border-radius: 10px;
-    text-align: center;
-    color: black;
-    width: 30%;
-    margin: 4px;
-    }
-    .retake{
+        border-radius: 10px;
         text-align: center;
-    background: #3d3db8;
-    border-radius: 22px;
-    width: 48%;
-    margin-left: 10%;
+        color: white;
+        margin: 4px;
+        margin: 3px;
+        padding: 6px;
+    }
+
+    .btn-tags-gray {
+        background-color: #e3e3ec;
+        border-radius: 10px;
+        text-align: center;
+        color: black;
+        width: 30%;
+        margin: 4px;
+    }
+
+    .retake {
+        text-align: center;
+        background: #3d3db8;
+        border-radius: 22px;
+        width: 48%;
+        margin-left: 10%;
     }
 </style>
+
 <body>
-    <div id="cover-spin" >
-       <p style="position: relative;
-       top: 26%;
-       text-align: center;
-       font-size: 2em;color: #1b1c18;">Your data is under process, Please wait...</p> 
-       <div class="" style="position: relative;height: 25%;text-align: center;">
-          If you wish to continue you can..  
-        <button class="retake" style="color: white;height: 20%;" onclick="retake();">Retake <i class="fa fa-video-camera"></i></button>
-        <button class="retake" style="color: white;width: 10%;height: 20%;" onclick="nextVideo()"> <i class="fa fa-arrow-right"></i></button>
+    <div id="cover-spin">
     </div>
-    </div>
-    
+
     <div class="main-container">
-        
+
     </div>
     <div class="" style="width: 100%;background-color: #6746a6;height: 21%;color: white;text-align: center;">
         <span class="" style="font-size: 1.5em;position: relative;top: 10%;">
@@ -134,22 +128,15 @@
             <p style="font-size: 20px;"><i class="fa fa-tag"></i></p>
             <p>Keywords Matched</p>
             <p>Good Match</p>
-           <div class="buttons" style="color:blue">
-                
-                <!-- <button class="btn-tags-blue"></button>
-                <button class="btn-tags-blue"></button>
-                <button class="btn-tags-blue"></button>
-                <button class="btn-tags-gray"></button>
-                <button class="btn-tags-gray"></button>
-                <button class="btn-tags-gray"></button>
-                <button class="btn-tags-gray"></button>
-                <button class="btn-tags-blue"></button> -->
+            <div class="buttons" style="color:blue">
             </div>
         </div>
         <div class="" style="position: relative;height: 25%;">
-            
-            <button class="retake" style="color: white;height: 20%;"onclick="retake();" >Retake <i class="fa fa-video-camera"></i></button>
-            <button class="retake" style="color: white;width: 10%;height: 20%;" onclick="nextVideo()"> <i class="fa fa-arrow-right"></i></button>
+
+            <button class="retake" style="color: white;height: 20%;" onclick="retake();">Retake <i
+                    class="fa fa-video-camera"></i></button>
+            <button class="retake" style="color: white;width: 10%;height: 20%;" onclick="nextVideo()"> <i
+                    class="fa fa-arrow-right"></i></button>
         </div>
     </div>
     <video width="320" height="240" class="videoBg" controls id="myVideo" style="display: none;">
@@ -174,71 +161,67 @@
     <!--===============================================================================================-->
     <script src="js/main.js"></script>
     <script>
-    var tag_value =  {
-        "positive":"&#128522",
-        "negative":"&#128532",
+        var tag_value = {
+            "positive": "&#128522",
+            "negative": "&#128532",
 
-    }
-    var accessToken = '';
-    // $("#txtDisplay").html(tag_value);
-   window.addEventListener('DOMContentLoaded', (event) => {
-    // console.log('DOM fully loaded and parsed', localStorage.getItem('txnId'));
-    $('#cover-spin').show(0)
-    getAccessToken();
-});
-function getAccessToken(){
-    var data = {
-    "apiKey": "cef7afbb-68e5-43d1-9cd5-468b2f39b674",
-    "apiSecret": "SVVTZEY-D3JM7M9-KKAMD2V-5WWVCX5",
-    "userId": "jagadish.pujari@ilimi.in"
-}
-    $.ajax({
-            url: 'https://api.marsview.ai/cb/v1/auth/create_access_token',
-            type: 'POST',
-            data: data,
-            success: function (response) {
-                accessToken = response.data.accessToken;
-                getMetadata();
-            },
-            error: function (err) {
-                alert(JSON.stringify(err));
-            }
+        }
+        var accessToken = '';
+        window.addEventListener('DOMContentLoaded', (event) => {
+            $('#cover-spin').show(0)
+            getAccessToken();
         });
-}
-function getMetadata(){
-        $.ajax({
-            url: 'https://api.marsview.ai/cb/v1/conversation/fetch_metadata/' + location.search.split('=')[1],
-            type: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + accessToken,
-            },
-            crossOrigin: true,
-            success: function (response) {
-                if(response.status){
-                    $('#cover-spin').hide(0)
-                    $(".emoji").html(tag_value[response.data.emotion[0].tone.value])
-                 document.getElementsByClassName('tone-msg')[0].innerText = response.data.emotion[0].tone.value.charAt(0).toUpperCase() + response.data.emotion[0].tone.value.slice(1)
-                    document.getElementsByClassName('confidence')[0].innerText = Math.round(response.data.emotion[0].tone.confidence*100) + "%";
-                    //document.getElementsByClassName('buttons')[0].innerText = response.data.topicsData
-                    response.data.topicsData.slice(-7).forEach(element  => {
-                       // var btn = '<button class="btn-blue">' + element + '</button>';
-                        var node = document.createElement('button');
-                        node.className = 'btn-tags-blue'
-                        node.innerText = element;
-                        document.getElementsByClassName('buttons')[0].appendChild(node);
-                    });
-                    document.getElementsByClassName('emotion-length')[0].innerText = response.data.emotion.length
-
+        function getAccessToken() {
+            var data = {
+                "apiKey": "cef7afbb-68e5-43d1-9cd5-468b2f39b674",
+                "apiSecret": "SVVTZEY-D3JM7M9-KKAMD2V-5WWVCX5",
+                "userId": "jagadish.pujari@ilimi.in"
+            }
+            $.ajax({
+                url: 'https://api.marsview.ai/cb/v1/auth/create_access_token',
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    accessToken = response.data.accessToken;
+                    getMetadata();
+                },
+                error: function (err) {
+                    alert(JSON.stringify(err));
                 }
-            },
-            error: function (err) {
-                alert(JSON.stringify(err));
-            }
-        });
-    }
-        function retake(){
+            });
+        }
+        function getMetadata() {
+            $.ajax({
+                url: 'https://api.marsview.ai/cb/v1/conversation/fetch_metadata/' + location.search.split('=')[1],
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken,
+                },
+                crossOrigin: true,
+                success: function (response) {
+                    if (response.status) {
+                        $('#cover-spin').hide(0)
+                        $(".emoji").html(tag_value[response.data.emotion[0].tone.value])
+                        document.getElementsByClassName('tone-msg')[0].innerText = response.data.emotion[0].tone.value.charAt(0).toUpperCase() + response.data.emotion[0].tone.value.slice(1)
+                        document.getElementsByClassName('confidence')[0].innerText = Math.round(response.data.emotion[0].tone.confidence * 100) + "%";
+                        response.data.topicsData.slice(-7).forEach(element => {
+                            var node = document.createElement('button');
+                            node.className = 'btn-tags-blue'
+                            node.innerText = element;
+                            document.getElementsByClassName('buttons')[0].appendChild(node);
+                        });
+                        document.getElementsByClassName('emotion-length')[0].innerText = response.data.emotion.length
+
+                    }
+                },
+                error: function (err) {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
+        function back() {
             $('#cover-spin').hide(0)
-            location.href = 'record.html';
+            location.href = 'report.html';
         }
         const video = document.getElementById("myVideo");
         const source = document.createElement("source");
@@ -247,7 +230,7 @@ function getMetadata(){
             source.src = src;
             $('#myVideo').css('display', 'block');
         }
-        function nextVideo(){
+        function nextVideo() {
             $('#cover-spin').hide(0)
             loadVideo(
                 video,
@@ -255,11 +238,11 @@ function getMetadata(){
             )
         }
         document.getElementById('myVideo').addEventListener('ended', myHandler, false);
-    function myHandler(e) {
-        // What you want to do after the event
-        console.log("Hey I am finished");
-        location.href = "record.html";
-    }
+        function myHandler(e) {
+            // What you want to do after the event
+            console.log("Hey I am finished");
+            location.href = "record.html";
+        }
     </script>
 </body>
 

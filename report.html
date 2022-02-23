@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>report</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/start-conv.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+    <!--===============================================================================================-->
+</head>
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid #96D4D4;
+    }
+</style>
+
+<body style="background-color: #61298c;color: white;">
+    <div id="cover-spin"></div>
+    <div class="main-container" id="record-page" style="position: relative;top: 10%;text-align: center;">
+        <div style="padding: 19px;
+    font-size: x-large;">
+
+            <span>List of record submitted for report</span>
+            <table id="txnIds" style="font-size: initial;">
+                <tr>
+                    <th>Transcatio ID</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </table>
+        </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    // self executing function here
+    (function () {
+        var data = localStorage.getItem('userTxnIds');
+        JSON.parse(data).forEach(element => {
+            $('#cover-spin').show(0)
+            console.log(element)
+            getAccessToken(element, createElements);
+        });
+    })();
+    function createElements(txnId, result) {
+        var txnStatus = result.status ? 'Available' : 'Processing';
+        var btn = "<button class='btn' style='color:white;' onclick='getReport(\"" + txnId + "\")' disabled='" + result.status + "'>click</button>";
+        var ele = '<tr><td>' + txnId + '</td><td>' + txnStatus + '</td><td>' + btn + '</td></tr>';
+        $("#txnIds").append(ele);
+        $('#cover-spin').hide(0)
+
+
+    }
+    function getReport(txnId) {
+        location.href = 'ai_code.html?txnId=' + txnId;
+    }
+
+    function getAccessToken(txnId, createElements) {
+        var data = {
+            "apiKey": "cef7afbb-68e5-43d1-9cd5-468b2f39b674",
+            "apiSecret": "SVVTZEY-D3JM7M9-KKAMD2V-5WWVCX5",
+            "userId": "jagadish.pujari@ilimi.in"
+        }
+        $.ajax({
+            url: 'https://api.marsview.ai/cb/v1/auth/create_access_token',
+            type: 'POST',
+            data: data,
+            success: function (response) {
+                accessToken = response.data.accessToken;
+                getMetadata(txnId, createElements);
+            },
+            error: function (err) {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    function getMetadata(txnId, cb) {
+        $.ajax({
+            url: 'https://api.marsview.ai/cb/v1/conversation/fetch_metadata/' + txnId,
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            },
+            crossOrigin: true,
+            success: function (response) {
+                if (response.status && response.data.length > 0) {
+                    cb(txnId, response)
+                } else {
+                    cb(txnId, response)
+                }
+            },
+            error: function (err) {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+
+</script>
+
+</html>
