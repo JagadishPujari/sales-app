@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>report</title>
+    <title>Report page</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
@@ -41,16 +41,17 @@
 
 <body style="background-color: #61298c;color: white;">
     <div id="cover-spin"></div>
+    <button class="retake" style="color: white;margin-left: 10%;font-size: 1.5em;margin-top: 10%;" onclick="back();">< Back </button>
     <div class="main-container" id="record-page" style="position: relative;top: 10%;text-align: center;">
         <div style="padding: 19px;
     font-size: x-large;">
 
-            <span>List of record submitted for report</span>
+            <span>List of records submitted for report</span>
             <table id="txnIds" style="font-size: initial;">
                 <tr>
-                    <th>Transcatio ID</th>
-                    <th>Status</th>
-                    <th></th>
+                    <th>Transcation ID</th>
+                    <th>Report Status</th>
+                    <th>Action</th>
                 </tr>
             </table>
         </div>
@@ -69,7 +70,8 @@
     })();
     function createElements(txnId, result) {
         var txnStatus = result.status ? 'Available' : 'Processing';
-        var btn = "<button class='btn' style='color:white;' onclick='getReport(\"" + txnId + "\")' disabled='" + result.status + "'>click</button>";
+        var btnDisabled = !result.status ? 'disabled' : '';
+        var btn = "<button class='btn' style='color:white;' onclick='getReport(\""+txnId+"\")' "+btnDisabled+">click</button>";
         var ele = '<tr><td>' + txnId + '</td><td>' + txnStatus + '</td><td>' + btn + '</td></tr>';
         $("#txnIds").append(ele);
         $('#cover-spin').hide(0)
@@ -78,6 +80,10 @@
     }
     function getReport(txnId) {
         location.href = 'ai_code.html?txnId=' + txnId;
+    }
+
+    function back(){
+        location.href = 'record.html';
     }
 
     function getAccessToken(txnId, createElements) {
