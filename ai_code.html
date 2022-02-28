@@ -69,7 +69,7 @@
 
     </div>
     <div class="" style="width: 100%;background-color: #6746a6;height: 21%;color: white;text-align: center;">
-        <span class="" style="font-size: 1.5em;position: relative;top: 10%;">
+        <span class="" style="font-size: 1.5em;position: relative;top: 10%;" onclick="back()">
             < Feedback </span>
     </div>
     <div class="header" style="margin-top: -24%;overflow-y: scroll;">
@@ -171,6 +171,9 @@
             $('#cover-spin').show(0)
             getAccessToken();
         });
+        function back(){
+        location.href = 'report.html';
+    }
         function getAccessToken() {
             var data = {
                 "apiKey": "cef7afbb-68e5-43d1-9cd5-468b2f39b674",
