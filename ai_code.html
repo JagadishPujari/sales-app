@@ -68,9 +68,16 @@
     <div class="main-container">
 
     </div>
-    <div class="" style="width: 100%;background-color: #6746a6;height: 21%;color: white;text-align: center;">
-        <span class="" style="font-size: 1.5em;position: relative;top: 10%;" onclick="back()">
+    <div class="" style="width: 100%;background-color: #6746a6;height: 21%;color: white;">
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="report.html">Reports</a>
+        </div>
+        <span style="font-size:40px;cursor:pointer" onclick="openNav()">&#9776;</span>
+    
+        <span class="" style="font-size: 1.5em; margin-left: 22%;" onclick="back()">
             < Feedback </span>
+            
     </div>
     <div class="header" style="margin-top: -24%;overflow-y: scroll;">
         <div class="vl" style="
@@ -161,6 +168,13 @@
     <!--===============================================================================================-->
     <script src="js/main.js"></script>
     <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "38%";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
         var tag_value = {
             "positive": "&#128522",
             "negative": "&#128532",
@@ -225,6 +239,9 @@
         function back() {
             $('#cover-spin').hide(0)
             location.href = 'report.html';
+        }
+        function retake(){
+            location.href = 'record.html';
         }
         const video = document.getElementById("myVideo");
         const source = document.createElement("source");

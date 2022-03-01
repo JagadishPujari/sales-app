@@ -30,13 +30,21 @@
     <!--===============================================================================================-->
 </head>
 <style>
-    video{
-  object-fit:fill
+    video {
+        object-fit: fill
+    }
 
-}
 </style>
+
 <body>
     <div class="" style="width: 100%;background-color: #6746a6;height: 19%;color: white;text-align: center;">
+        
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="report.html">Reports</a>
+        </div>
+        <span style="font-size:40px;cursor:pointer" onclick="openNav()">&#9776;</span>
+    
         <span class="" style="font-size: 1.5em;position: relative;top: 10%;">
             < Customer Conversation </span>
     </div>
@@ -89,7 +97,14 @@
     <!--===============================================================================================-->
     <script src="js/main.js"></script>
     <script>
-        function startConv(){
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "38%";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+        function startConv() {
             console.log("Enable video")
             $("#myVideo").css('display', 'block');
             // document.getElementsByTagName('video')[0].webkitEnterFullscreen(); 
