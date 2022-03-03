@@ -58,6 +58,7 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
 <script>
     // self executing function here
     (function () {
@@ -69,8 +70,8 @@
         });
     })();
     function createElements(txnId, result) {
-        var txnStatus = result.status ? 'Available' : 'Processing';
-        var btnDisabled = !result.status ? 'disabled' : '';
+        var txnStatus = result.status && !_.isEmpty(result.data) ? 'Available' : 'Processing';
+        var btnDisabled = !result.status || _.isEmpty(result.data) ? 'disabled' : '';
         var btn = "<button class='btn' style='color:white;' onclick='getReport(\""+txnId+"\")' "+btnDisabled+">click</button>";
         var ele = '<tr><td>' + txnId + '</td><td>' + txnStatus + '</td><td>' + btn + '</td></tr>';
         $("#txnIds").append(ele);
